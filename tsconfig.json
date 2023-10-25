@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",  // Your target version may vary
+    "lib": ["DOM", "ESNext"]  // Add "DOM" to include the fetch API
+    // ...other options
+  },
+  "buildOptions": {
+    "baseUrl": "/"
+  }
+}

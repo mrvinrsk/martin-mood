@@ -1,0 +1,19 @@
+<span class="highlight">
+    <slot/>
+</span>
+
+<style>
+    .highlight {
+        position: relative;
+        display: inline-block;
+        padding-inline: .25em;
+        border-radius: 5px;
+        background-color: var(--clr-primary);
+        transition: all 250ms ease-in-out;
+    }
+
+    .highlight.larger {
+        transform: scale(1.1) rotate(3deg);
+        margin-inline: .5em;
+    }
+</style>

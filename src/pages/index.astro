@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MoodCard from '../components/MoodCard.astro';
+import Highlight from "../components/Highlight.astro";
+
+const moods = [
+    {
+        title: "Sehr Sauer",
+        unique: "sauer",
+        image: "../images/martin-sehr-sauer.webp"
+    },
+    {
+        title: "Sauer",
+        unique: "sauer",
+        image: "../images/martin-sauer.webp"
+    },
+    {
+        title: "Müde",
+        unique: "muede",
+        image: "../images/martin-muede.webp"
+    },
+    {
+        title: "Traurig",
+        unique: "sad",
+        image: "../images/martin-traurig.webp"
+    },
+    {
+        title: "Fröhlich",
+        unique: "happy",
+        image: "../images/martin-froehlich.webp"
+    },
+];
+---
+
+<Layout title="Wie fühlst du dich heute? | Mood-Martin">
+    <main>
+
+        <h1>Ich fühle mich heute
+            <Highlight>Martin<span id="mood"></span></Highlight>
+        </h1>
+
+        <div class="grid">
+            {moods.map((mood) =>
+                    <MoodCard title={mood.title} image={mood.image} unique={mood.unique}/>)}
+        </div>
+    </main>
+</Layout>
+
+<style is:global>
+    main {
+        margin-inline: auto;
+        padding: 1rem;
+        width: min(95%, 1200px);
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 3.5rem;
+    }
+</style>
+
+<script>
+    const d = new Date();
+    const dstr = d.getDay().toString() + d.getMonth().toString() + d.getFullYear().toString();
+    const m = document.getElementById('mood');
+
+    document.querySelectorAll('.mood-card').forEach((card) => {
+        card.addEventListener('mouseenter', () => {
+            m.innerHTML = " " + card.querySelector('strong').innerHTML + (!card.classList.contains("active") ? "?" : "");
+        });
+
+        card.addEventListener('mouseleave', () => {
+            if (!document.querySelector('.mood-card.active')) m.innerHTML = "";
+            else m.innerHTML = " " + document.querySelector('.mood-card.active').querySelector('strong').innerHTML;
+        });
+
+        card.addEventListener('click', () => {
+            m.innerHTML = " " + card.querySelector('strong').innerHTML;
+            m.closest(".highlight").classList.add('larger');
+
+            document.querySelectorAll('.mood-card').forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+
+            localStorage.setItem(dstr, card.getAttribute('data-mood'))
+        });
+    });
+
+    // load from localStorage: cookie name {date}_mood
+    if (localStorage.getItem(dstr)) {
+        const mo = localStorage.getItem(dstr);
+
+        console.log(mo);
+
+        const activeCard = document.querySelector(`.mood-card[data-mood="${mo}"]`);
+        activeCard.classList.add('active');
+
+        m.innerHTML = " " + activeCard.querySelector('strong').innerHTML;
+        m.closest('.highlight').classList.add("larger");
+    }
+</script>
